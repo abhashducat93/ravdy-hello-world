@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevOps Terminal | Valaxy</title>
+    <title>DevOps Deployment | Valaxy</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -13,9 +13,8 @@
         }
         
         body {
-            font-family: 'Monaco', 'Consolas', monospace;
-            background: #1a1a1a;
-            color: #00ff00;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -23,242 +22,217 @@
             padding: 20px;
         }
         
-        .terminal {
-            background: #000;
-            border-radius: 8px;
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 60px;
+            max-width: 800px;
             width: 100%;
-            max-width: 900px;
-            box-shadow: 0 0 40px rgba(0, 255, 0, 0.1);
-            overflow: hidden;
-            border: 1px solid #333;
-        }
-        
-        .terminal-header {
-            background: #222;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #333;
-        }
-        
-        .terminal-buttons {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .terminal-button {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        
-        .button-red { background: #ff5f56; }
-        .button-yellow { background: #ffbd2e; }
-        .button-green { background: #27c93f; }
-        
-        .terminal-title {
-            flex: 1;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
             text-align: center;
-            color: #888;
-            font-size: 14px;
+            position: relative;
+            overflow: hidden;
         }
         
-        .terminal-body {
-            padding: 30px;
-            min-height: 500px;
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
         }
         
-        .command-line {
-            margin-bottom: 20px;
+        .icon-container {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: white;
+            font-size: 48px;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
         
-        .prompt {
-            color: #00ff00;
+        h1 {
+            font-size: 2.8rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-weight: 800;
+            line-height: 1.2;
         }
         
-        .command {
-            color: #fff;
-            animation: typing 2s steps(40);
+        .highlight {
+            background: linear-gradient(120deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         
-        .output {
-            margin-left: 40px;
+        .deployment-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin: 30px 0;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .tech-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tech-icon {
+            font-size: 2.5rem;
+            color: #4a5568;
+            transition: all 0.3s;
+        }
+        
+        .tech-icon:hover {
+            transform: scale(1.2);
+            color: #667eea;
+        }
+        
+        .welcome-section {
+            background: #f7fafc;
+            padding: 30px;
+            border-radius: 16px;
+            margin: 40px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .welcome-section h2 {
+            color: #4a5568;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .welcome-section p {
+            color: #718096;
             line-height: 1.6;
         }
         
-        .output-line {
-            margin: 10px 0;
-            opacity: 0;
-            animation: fadeIn 0.5s forwards;
-        }
-        
-        .output-line:nth-child(1) { animation-delay: 2.5s; }
-        .output-line:nth-child(2) { animation-delay: 3s; }
-        .output-line:nth-child(3) { animation-delay: 3.5s; }
-        .output-line:nth-child(4) { animation-delay: 4s; }
-        .output-line:nth-child(5) { animation-delay: 4.5s; }
-        .output-line:nth-child(6) { animation-delay: 5s; }
-        
-        .highlight {
-            color: #ffff00;
-        }
-        
-        .success {
-            color: #00ff00;
-        }
-        
-        .info {
-            color: #00ffff;
-        }
-        
-        .warning {
-            color: #ffaa00;
-        }
-        
-        .ascii-art {
-            color: #00ff00;
-            font-size: 12px;
-            line-height: 1.2;
-            margin: 20px 0;
-        }
-        
-        .cursor {
-            display: inline-block;
-            width: 8px;
-            height: 16px;
-            background: #00ff00;
-            margin-left: 5px;
-            animation: blink 1s infinite;
-        }
-        
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-        
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        
-        .footer {
-            text-align: center;
+        .status-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
             margin-top: 30px;
-            color: #666;
-            font-size: 12px;
-            border-top: 1px solid #333;
-            padding-top: 15px;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background: #48bb78;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .company-name {
+            color: #667eea;
+            font-weight: 700;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        
+        @media (max-width: 768px) {
+            .card { padding: 40px 25px; }
+            h1 { font-size: 2.2rem; }
+            .icon-container { width: 80px; height: 80px; font-size: 36px; }
         }
     </style>
 </head>
 <body>
-    <div class="terminal">
-        <div class="terminal-header">
-            <div class="terminal-buttons">
-                <div class="terminal-button button-red"></div>
-                <div class="terminal-button button-yellow"></div>
-                <div class="terminal-button button-green"></div>
-            </div>
-            <div class="terminal-title">
-                devops-deployment@valaxy: ~/project
-            </div>
+    <div class="card">
+        <div class="icon-container">
+            <i class="fas fa-infinity"></i>
         </div>
         
-        <div class="terminal-body">
-            <div class="command-line">
-                <span class="prompt">$</span>
-                <span class="command">echo "DevOps Deployment Status"</span>
-            </div>
-            
-            <div class="output">
-                <div class="output-line">
-                    <span class="info">=== DevOps Deployment Dashboard ===</span>
-                </div>
-                
-                <div class="output-line">
-                    <span class="highlight">Hello, Welcome to Simple DevOps Project !!</span>
-                </div>
-                
-                <div class="output-line">
-                    <span class="warning">» Deploying on Kubernetes using Ansible</span>
-                </div>
-                
-                <div class="output-line">
-                    <span class="info">Client: Valaxy Technologies</span>
-                </div>
-                
-                <div class="output-line">
-                    <span class="success">✓ Glad to see you here !</span>
-                </div>
-                
-                <div class="output-line">
-                    <span class="info">=========================================</span>
-                </div>
-            </div>
-            
-            <div class="ascii-art">
- ██████╗ ███████╗██╗   ██╗ ██████╗ ██████╗ ███████╗<br>
-██╔═══██╗██╔════╝██║   ██║██╔═══██╗██╔══██╗██╔════╝<br>
-██║   ██║█████╗  ██║   ██║██║   ██║██████╔╝███████╗<br>
-██║   ██║██╔══╝  ╚██╗ ██╔╝██║   ██║██╔═══╝ ╚════██║<br>
-╚██████╔╝███████╗ ╚████╔╝ ╚██████╔╝██║     ███████║<br>
- ╚═════╝ ╚══════╝  ╚═══╝   ╚═════╝ ╚═╝     ╚══════╝
-            </div>
-            
-            <div class="command-line">
-                <span class="prompt">$</span>
-                <span class="command">system_status --check</span>
-                <div class="cursor"></div>
-            </div>
-            
-            <div class="output">
-                <div class="output-line">
-                    <span class="success">✓ Kubernetes Cluster: ONLINE</span>
-                </div>
-                <div class="output-line">
-                    <span class="success">✓ Ansible Controller: ACTIVE</span>
-                </div>
-                <div class="output-line">
-                    <span class="success">✓ Deployment Pipeline: RUNNING</span>
-                </div>
-                <div class="output-line">
-                    <span class="success">✓ All Services: HEALTHY</span>
-                </div>
-            </div>
-            
-            <div class="footer">
-                Automated DevOps Pipeline | Valaxy Technologies | Type 'help' for commands
-            </div>
+        <h1>
+            Hello, Welcome to 
+            <span class="highlight">Simple DevOps Project</span>
+        </h1>
+        
+        <div class="deployment-badge">
+            <i class="fas fa-rocket"></i>
+            Deploying on Kubernetes using Ansible
+        </div>
+        
+        <p style="color: #718096; font-size: 1.2rem; margin-bottom: 20px;">
+            For <span class="company-name">Valaxy Technologies</span>
+        </p>
+        
+        <div class="tech-icons">
+            <i class="fab fa-kubernetes tech-icon" title="Kubernetes"></i>
+            <i class="fab fa-ansible tech-icon" title="Ansible"></i>
+            <i class="fab fa-jenkins tech-icon" title="Jenkins"></i>
+            <i class="fab fa-docker tech-icon" title="Docker"></i>
+            <i class="fab fa-git-alt tech-icon" title="Git"></i>
+        </div>
+        
+        <div class="welcome-section">
+            <h2>Glad to see you here! 👋</h2>
+            <p>
+                This project showcases automated deployment workflows with Kubernetes orchestration 
+                and Ansible automation. Experience the power of modern DevOps practices in action.
+            </p>
+        </div>
+        
+        <div class="status-container">
+            <div class="status-dot"></div>
+            <span style="color: #4a5568; font-weight: 500;">
+                System Status: <strong style="color: #48bb78;">Operational</strong>
+            </span>
         </div>
     </div>
     
     <script>
-        // Simulate typing effect for commands
-        document.addEventListener('DOMContentLoaded', function() {
-            const commands = document.querySelectorAll('.command');
-            commands.forEach((cmd, index) => {
-                const text = cmd.textContent;
-                cmd.textContent = '';
-                let i = 0;
-                
-                function typeWriter() {
-                    if (i < text.length) {
-                        cmd.textContent += text.charAt(i);
-                        i++;
-                        setTimeout(typeWriter, 50);
-                    }
-                }
-                
-                setTimeout(typeWriter, index * 2500);
+        // Add some interactive effects
+        document.querySelectorAll('.tech-icon').forEach(icon => {
+            icon.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.2) rotate(5deg)';
+            });
+            
+            icon.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1) rotate(0deg)';
             });
         });
+        
+        // Update status message
+        const statusMessages = [
+            "Deploying containers...",
+            "Running health checks...",
+            "Scaling services...",
+            "Monitoring metrics...",
+            "All systems operational ✓"
+        ];
+        
+        let currentStatus = 0;
+        function updateStatus() {
+            const statusElement = document.querySelector('.status-container span');
+            if (currentStatus < statusMessages.length) {
+                statusElement.innerHTML = `Status: <strong>${statusMessages[currentStatus]}</strong>`;
+                currentStatus++;
+                setTimeout(updateStatus, 2000);
+            }
+        }
+        
+        // Start status animation after 3 seconds
+        setTimeout(updateStatus, 3000);
     </script>
 </body>
 </html>
