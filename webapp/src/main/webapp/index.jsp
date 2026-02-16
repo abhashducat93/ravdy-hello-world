@@ -255,7 +255,7 @@
                 <div class="logo">
                     <i class="fas fa-cloud"></i>
                 </div>
-                <h1>Hello, ****Welcome to DevOps World****</h1>
+                <h1>Hello, ****Welcome to DevOps Universe****</h1>
                 <p class="tagline">Streamlined CI/CD pipeline with automated Kubernetes deployment using Ansible</p>
             </div>
             
